@@ -74,9 +74,17 @@ npm run preview  # serve the production build
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site and
-publishes it to GitHub Pages. The Vite `base` is set to `/China-Itinerary/` to match the
-repository name — change both together if you rename the repo.
+Pushing to the default branch runs `.github/workflows/deploy.yml`, which builds the site
+and force-pushes `dist/` to the **`gh-pages`** branch.
+
+The Vite `base` is set to `/China-Itinerary/` to match the repository name — change both
+together if you ever rename the repo.
+
+> **One-time setup:** if the site does not appear at the URL above within a couple of
+> minutes of the first successful run, go to **Settings → Pages** and set
+> *Source: Deploy from a branch*, *Branch: `gh-pages` / `(root)`*. GitHub often enables
+> this automatically the first time a `gh-pages` branch appears, but not always — and the
+> Pages API cannot be called from CI in this repository, so it may need the one click.
 
 ## Built with
 
