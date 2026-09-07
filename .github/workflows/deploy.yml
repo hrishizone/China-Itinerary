@@ -28,7 +28,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      # enablement turns Pages on automatically on the first successful run,
+      # so the repo needs no manual settings change.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Add SPA / 404 fallback
         run: cp dist/index.html dist/404.html
