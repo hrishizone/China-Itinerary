@@ -40,10 +40,8 @@ function saveCache() {
   clearTimeout(saveTimer)
   saveTimer = setTimeout(() => {
     try {
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({ ts: Date.now(), data: Object.fromEntries(memory) })
-      )
+      const resolved = Object.fromEntries([...memory].filter(([, url]) => url))
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: resolved }))
     } catch {
       /* ignore */
     }
@@ -86,7 +84,13 @@ async function flush() {
           titles: chunk.join('|'),
           ...cont,
         })
-        const res = await fetch(`${ENDPOINT}?${params}`)
+        let res = await fetch(`${ENDPOINT}?${params}`)
+        if (!res.ok) {
+          // One retry: transient 429s and dropped connections are common on a
+          // cold network, and the alternative is a page full of placeholders.
+          await new Promise((r) => setTimeout(r, 700))
+          res = await fetch(`${ENDPOINT}?${params}`)
+        }
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const json = await res.json()
         const q = json.query || {}
@@ -131,7 +135,8 @@ async function flush() {
           })
       )
     }
-    // Anything still unresolved is marked so the UI stops waiting on it.
+    // Mark anything still unresolved so the UI stops waiting on it. These
+    // nulls live in memory only — saveCache drops them, so a later visit retries.
     for (const t of chunk) if (!got.has(t)) memory.set(t, null)
   }
   saveCache()

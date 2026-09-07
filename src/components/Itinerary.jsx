@@ -1,11 +1,22 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Footprints, Wallet, BedDouble, Lightbulb, UtensilsCrossed, Star } from 'lucide-react'
+import { Footprints, Wallet, BedDouble, Lightbulb, UtensilsCrossed, Star, ArrowRight } from 'lucide-react'
 import SmartImage from './SmartImage'
 import { Icon, Chip, toneForTag, SectionHeading, Reveal, inr } from './ui'
-import { days, cities } from '../data/trip'
+import { days, cities, hotels } from '../data/trip'
+
+/** A meta tile that becomes a link when it points somewhere. */
+function Tile({ as: Tag = 'div', className = '', children, ...rest }) {
+  return (
+    <Tag className={`${className} ${Tag === 'a' ? 'block transition-colors hover:bg-ink-850' : ''}`} {...rest}>
+      {children}
+    </Tag>
+  )
+}
 
 const cityOf = (id) => cities.find((c) => c.id === id)
+const hotelOf = (id) => hotels.find((h) => h.id === id)
+const pickOf = (id) => hotelOf(id)?.options.find((o) => o.pick)
 
 function Block({ b, i, accent }) {
   return (
@@ -24,27 +35,35 @@ function Block({ b, i, accent }) {
         <Icon name={b.icon} size={11} style={{ color: accent }} />
       </span>
 
-      <div className="pb-9">
-        <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <time className="font-mono text-[12px] font-semibold tracking-wider" style={{ color: accent }}>
-            {b.time}
-          </time>
-          {b.tag && <Chip tone={toneForTag(b.tag)}>{b.tag}</Chip>}
-          {b.cost > 0 && (
-            <span className="ml-auto font-mono text-[12px] text-white/40 transition-colors group-hover:text-white/70">
-              {inr(b.cost)}
-            </span>
-          )}
-          {b.cost === 0 && (
-            <span className="ml-auto font-mono text-[12px] text-jade-400/60">free</span>
-          )}
+      <div className="flex gap-4 pb-9 sm:gap-6">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <time className="font-mono text-[12px] font-semibold tracking-wider" style={{ color: accent }}>
+              {b.time}
+            </time>
+            {b.tag && <Chip tone={toneForTag(b.tag)}>{b.tag}</Chip>}
+            {b.cost > 0 ? (
+              <span className="ml-auto font-mono text-[12px] text-white/40 transition-colors group-hover:text-white/70">
+                {inr(b.cost)}
+              </span>
+            ) : (
+              <span className="ml-auto font-mono text-[12px] text-jade-400/60">free</span>
+            )}
+          </div>
+          <h4 className="font-display text-[19px] font-bold leading-snug text-white sm:text-[21px]">
+            {b.title}
+          </h4>
+          <p className="mt-2 text-[14px] leading-[1.75] text-white/55 sm:text-[15px]">{b.detail}</p>
         </div>
-        <h4 className="font-display text-[19px] font-bold leading-snug text-white sm:text-[21px]">
-          {b.title}
-        </h4>
-        <p className="mt-2 max-w-3xl text-[14px] leading-[1.75] text-white/55 sm:text-[15px]">
-          {b.detail}
-        </p>
+
+        {b.wiki && (
+          <SmartImage
+            wiki={b.wiki}
+            alt={b.title}
+            className="h-24 w-24 shrink-0 rounded-xl border border-white/8 sm:h-36 sm:w-52"
+            imgClassName="transition-transform duration-[1.3s] ease-out group-hover:scale-[1.09]"
+          />
+        )}
       </div>
     </motion.li>
   )
@@ -143,18 +162,25 @@ export default function Itinerary() {
             {/* Day meta strip */}
             <div className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/8 bg-white/8 sm:grid-cols-4">
               {[
-                { icon: BedDouble, label: 'Tonight', value: d.stay, sub: d.stayCost ? inr(d.stayCost) : 'no hotel bill' },
+                {
+                  icon: BedDouble,
+                  label: 'Tonight',
+                  value: pickOf(d.hotelId)?.name ?? d.stay,
+                  sub: d.stayCost ? `${inr(d.stayCost)} · ${hotelOf(d.hotelId).area}` : 'no hotel bill',
+                  href: d.hotelId ? '#stay' : null,
+                },
                 { icon: Footprints, label: 'On foot', value: `${d.walkKm} km`, sub: 'roughly' },
                 { icon: Wallet, label: "Day's spend", value: inr(d.spend), sub: 'everything included' },
                 { icon: Star, label: 'Stops', value: String(d.blocks.length), sub: 'timed and costed' },
               ].map((m) => (
-                <div key={m.label} className="bg-ink-900 p-4">
+                <Tile key={m.label} as={m.href ? 'a' : 'div'} href={m.href} className="bg-ink-900 p-4">
                   <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
                     <m.icon size={12} /> {m.label}
+                    {m.href && <ArrowRight size={11} className="ml-auto text-white/25" />}
                   </div>
                   <div className="text-[14px] font-semibold leading-snug text-white">{m.value}</div>
                   <div className="mt-0.5 text-[12px] text-white/35">{m.sub}</div>
-                </div>
+                </Tile>
               ))}
             </div>
 
