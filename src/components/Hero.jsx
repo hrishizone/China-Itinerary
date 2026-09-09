@@ -8,7 +8,7 @@ import { meta, days } from '../data/trip'
 const FACTS = [
   { k: '7', v: 'days' },
   { k: '3', v: 'cities' },
-  { k: '4', v: 'UNESCO sites' },
+  { k: String(meta.unescoSites), v: 'UNESCO sites' },
   { k: String(days.reduce((a, d) => a + d.blocks.length, 0)), v: 'timed stops' },
 ]
 

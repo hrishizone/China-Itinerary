@@ -6,6 +6,7 @@ const LINKS = [
   { id: 'overview', label: 'Overview' },
   { id: 'route', label: 'Route' },
   { id: 'itinerary', label: 'Itinerary' },
+  { id: 'trail', label: 'Beijing map' },
   { id: 'stay', label: 'Stay' },
   { id: 'budget', label: 'Budget' },
   { id: 'eat', label: 'Eat' },

@@ -25,11 +25,11 @@ comes in under ₹1,00,000 with both international flights inside it.
 |---|---|
 | **Route** | Mumbai → Beijing (3 days) → Xi'an (1.5 days) → Shanghai (2.5 days) → Mumbai |
 | **Duration** | 7 days on the ground, 2 of them starting before 07:00 |
-| **Total budget** | ₹1,00,000 — ₹92,150 planned, ₹7,850 genuine buffer |
+| **Total budget** | ₹1,00,000 — ₹92,400 planned, ₹7,600 genuine buffer |
 | **Flights** | ₹38,000 open-jaw (in to Beijing PEK, out of Shanghai PVG) |
-| **On the ground** | ₹47,550 across all seven days |
+| **On the ground** | ₹47,800 across all seven days |
 | **Hotels** | 5 nights, ₹13,300 — named properties in Qianmen, inside Xi'an's wall, and Jing'an |
-| **UNESCO sites** | Great Wall · Forbidden City · Temple of Heaven · Terracotta Army |
+| **UNESCO sites** | Great Wall · Forbidden City · Temple of Heaven · Summer Palace · Terracotta Army · Xi'an walls |
 
 ### The two decisions that make it work
 
@@ -45,6 +45,9 @@ comes in under ₹1,00,000 with both international flights inside it.
 - **Itinerary** — the centrepiece: day-by-day, hour-by-hour, 73 stops with prices,
   booking deadlines and the things that will trip you up — 59 of them carry a
   photograph of the actual place
+- **Beijing map** — a trail map per Beijing day, projected from real WGS-84
+  coordinates, showing the walking and metro legs against the Central Axis and
+  the 2nd Ring Road, with distance and transit time per leg
 - **Stay** — three neighbourhoods and nine real hotels (a hostel, the plan's pick and
   a splurge in each city), with live rate-check and map links, plus the order to book
   the whole trip in and which deadlines are hard

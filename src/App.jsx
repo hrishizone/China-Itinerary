@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import Overview from './components/Overview'
 import RouteMap from './components/RouteMap'
 import Itinerary from './components/Itinerary'
+import BeijingTrail from './components/BeijingTrail'
 import Hotels from './components/Hotels'
 import Budget from './components/Budget'
 import Food from './components/Food'
@@ -37,6 +38,7 @@ export default function App() {
         <Overview />
         <RouteMap />
         <Itinerary />
+        <BeijingTrail />
         <Hotels />
         <Budget />
         <Food />
